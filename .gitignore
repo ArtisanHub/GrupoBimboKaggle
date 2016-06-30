@@ -39,3 +39,5 @@ Thumbs.db
 # Intellij Ide generated files #
 ######################
 .idea
+Dev.iml
+out
