@@ -1,4 +1,3 @@
-
 package org.artisanhub;
 
 import java.io.BufferedReader;
@@ -33,7 +32,6 @@ public class ReadProduct {
             }
 
         }
-
         return count;
     }
 }
