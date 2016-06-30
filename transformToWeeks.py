@@ -56,5 +56,5 @@ options = {1: week1Write,
 for line in trainingDataSet:
     if not line.startswith("S"):
         options[int(line[0])]()
-        print(int(line[0]))
-        break
+
+print("Training dataset has been successfully divided into 9 weeks")
