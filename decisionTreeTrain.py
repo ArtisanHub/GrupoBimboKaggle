@@ -8,11 +8,53 @@ temp = []
 count = 0
 val = 0
 
-f = open( 'D:/FYP/DM/DecisionTreeBimbo/Data/data.csv', 'rU' ) #open train data
+f = open( 'D:/FYP-Developments/DebsDataset/KaggaleDataset/weeklySeperatedData/week3.csv', 'rU' ) #open train data
 for line in f:
     cells = line.split( "," )
-    features.append( ( cells[ 0 ], cells[ 1 ], cells[ 3 ], cells[ 4 ] ) )
-    lables.append((cells[5], cells[6], cells[7], cells[8], cells[9]))
+    features.append( ( cells[ 2 ], cells[ 3 ], cells[ 5 ] ) )
+    lables.append((cells[10]))
+f.close()
+
+f = open( 'D:/FYP-Developments/DebsDataset/KaggaleDataset/weeklySeperatedData/week4.csv', 'rU' ) #open train data
+for line in f:
+    cells = line.split( "," )
+    features.append( ( cells[ 2 ], cells[ 3 ], cells[ 5 ] ) )
+    lables.append((cells[10]))
+f.close()
+
+f = open( 'D:/FYP-Developments/DebsDataset/KaggaleDataset/weeklySeperatedData/week5.csv', 'rU' ) #open train data
+for line in f:
+    cells = line.split( "," )
+    features.append( ( cells[ 2 ], cells[ 3 ], cells[ 5 ] ) )
+    lables.append((cells[10]))
+f.close()
+
+f = open( 'D:/FYP-Developments/DebsDataset/KaggaleDataset/weeklySeperatedData/week6.csv', 'rU' ) #open train data
+for line in f:
+    cells = line.split( "," )
+    features.append( ( cells[ 2 ], cells[ 3 ], cells[ 5 ] ) )
+    lables.append((cells[10]))
+f.close()
+
+f = open( 'D:/FYP-Developments/DebsDataset/KaggaleDataset/weeklySeperatedData/week7.csv', 'rU' ) #open train data
+for line in f:
+    cells = line.split( "," )
+    features.append( ( cells[ 2 ], cells[ 3 ], cells[ 5 ] ) )
+    lables.append((cells[10]))
+f.close()
+
+f = open( 'D:/FYP-Developments/DebsDataset/KaggaleDataset/weeklySeperatedData/week8.csv', 'rU' ) #open train data
+for line in f:
+    cells = line.split( "," )
+    features.append( ( cells[ 2 ], cells[ 3 ], cells[ 5 ] ) )
+    lables.append((cells[10]))
+f.close()
+
+f = open( 'D:/FYP-Developments/DebsDataset/KaggaleDataset/weeklySeperatedData/week9.csv', 'rU' ) #open train data
+for line in f:
+    cells = line.split( "," )
+    features.append( ( cells[ 2 ], cells[ 3 ], cells[ 5 ] ) )
+    lables.append((cells[10]))
 f.close()
 
 
@@ -20,14 +62,15 @@ f.close()
 clf = tree.DecisionTreeClassifier()
 clf = clf.fit(features, lables)
 
-f = open( 'D:/FYP/DM/DecisionTreeBimbo/Data/test.csv', 'rU' ) #open test data
+
+f = open( 'D:/FYP-Developments/DebsDataset/KaggaleDataset/test.csv', 'rU' ) #open test data
 for line in f:
     cells = line.split( "," )
-    test.append( ( cells[ 1 ], cells[ 2 ], cells[ 4 ], cells[ 5 ] ) )
+    test.append( ( cells[ 3 ], cells[ 4 ], cells[ 6 ] ) )
 
 f.close()
 
-output = open('D:/FYP/DM/DecisionTreeBimbo/Data/result.csv', 'w')
+output = open('D:/FYP-Developments/DebsDataset/KaggaleDataset/result.csv', 'w')
 
 for itm in test:
     temp.append(clf.predict(itm))
@@ -41,10 +84,14 @@ for itm in temp:
     output.write(str(count))
     output.write(str(","))
 
-    val = int(itm.item(4))
+    val = int(itm.item(0))
     output.write(str(val))
 
     output.write(str("\n"))
     count = count + 1
 
+
+
+
+print("Finish")
 
