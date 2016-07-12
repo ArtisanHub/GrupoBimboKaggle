@@ -12,8 +12,8 @@ Y = dataset[:,10]
 # create model
 model = Sequential()
 model.add(Dense(12, input_dim=10, init='uniform', activation='relu'))
-model.add(Dense(8, init='uniform', activation='relu'))
-model.add(Dense(1, init='uniform', activation='linear'))
+model.add(Dense(8, init='uniform', activation='softplus'))
+model.add(Dense(1, init='uniform', activation='softplus'))
 # Compile model
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 # Fit the model
