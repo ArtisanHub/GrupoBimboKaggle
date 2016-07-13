@@ -19,8 +19,7 @@ class Median(BaseEstimator):
 
     def fit(self, X, y=None):
         block = pd.concat([X, y], axis=1)  # concatination of both x and y blocks into one block
-        target = block.columns[
-            -1]  # Demanda_uni_equil is our target (we want to calculate demand)  target = Demanda_uni_equil
+        target = block.columns[-1]  # Demanda_uni_equil is our target
         # all keys dict
         all_keys = block.groupby(self.keys).agg({target: np.median})
 
