@@ -1,7 +1,7 @@
 from keras.models import Sequential
 from keras.layers import Dense
 
-pathToInputDataSet = "/home/rnavagamuwa/Documents/CSE/Semester7/DataMining/kaggle/weeklySeperatedData/week3Relevant.csv"
+pathToInputDataSet = "/home/rnavagamuwa/Documents/CSE/Semester7/DataMining/kaggle/weeklySeperatedData/train.csv"
 inputDataSet = open(pathToInputDataSet,"r")
 
 
@@ -30,20 +30,20 @@ model.compile(loss='mae', optimizer='Adam', metrics=['accuracy'])
 model.fit(X, Y, nb_epoch=150, batch_size=10)
 
 
-# pathToTestDataSet = "/home/rnavagamuwa/Documents/CSE/Semester7/DataMining/kaggle/weeklySeperatedData/test.csv"
-# inputTestDataSet = open(pathToInputDataSet,"r")
-#
-# inputDataArr = []
-# outputDataArray = []
-#
-# for line in inputDataSet:
-#      row =[ int(n) for n in line.replace("\n","").split(",")]
-#      outputDataArray.append(row[4])
-#      row.pop()
-#      inputDataArr.append(row)
-#
-# X = inputDataArr
-# Y = outputDataArray
+pathToTestDataSet = "/home/rnavagamuwa/Documents/CSE/Semester7/DataMining/kaggle/weeklySeperatedData/week7.csv"
+inputTestDataSet = open(pathToInputDataSet,"r")
+
+inputDataArr = []
+outputDataArray = []
+
+for line in inputTestDataSet:
+     row =[ int(n) for n in line.replace("\n","").split(",")]
+     outputDataArray.append(row[4])
+     row.pop()
+     inputDataArr.append(row)
+
+X = inputDataArr
+Y = outputDataArray
 
 # evaluate the model
 scores = model.evaluate(X, Y)
