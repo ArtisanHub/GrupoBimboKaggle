@@ -29,10 +29,10 @@ submit <- merge(submit, mean_C, all.x = TRUE, by = "Canal_ID")
 
 # Now create Predictions column;
 submit$Pred <- expm1(submit$MCRPC)
-submit[is.na(Pred)]$Pred <- expm1(submit[is.na(Pred)]$MCRP)
-submit[is.na(Pred)]$Pred <- expm1(submit[is.na(Pred)]$MCR)
-submit[is.na(Pred)]$Pred <- expm1(submit[is.na(Pred)]$MC)
-submit[is.na(Pred)]$Pred <- expm1(mean_total)
+submit[is.na(Pred)]$Pred <- exp(submit[is.na(Pred)]$MCRP)- 0.000001
+submit[is.na(Pred)]$Pred <- exp(submit[is.na(Pred)]$MCR)- 0.000001
+submit[is.na(Pred)]$Pred <- exp(submit[is.na(Pred)]$MC) -0.000001
+submit[is.na(Pred)]$Pred <- exp(mean_total) - 0.000001
 
 
 print("Write out submission file")
