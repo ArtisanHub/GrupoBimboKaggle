@@ -66,7 +66,7 @@ clf = clf.fit(features, lables)
 f = open( 'D:/FYP-Developments/DebsDataset/KaggaleDataset/test.csv', 'rU' ) #open test data
 for line in f:
     cells = line.split( "," )
-    test.append( ( cells[ 3 ], cells[ 4 ], cells[ 6 ] ) )
+    test.append(( cells[ 3 ], cells[ 4 ], cells[ 6 ] ))
 
 f.close()
 
