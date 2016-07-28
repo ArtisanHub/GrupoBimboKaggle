@@ -18,22 +18,32 @@ class Median(BaseEstimator):
         self.not_found = 0
 
     def fit(self, X, y=None):
+        start_time = time.time()
         block = pd.concat([X, y], axis=1)  # concatination of both x and y blocks into one block
         target = block.columns[-1]  # Demanda_uni_equil is our target
         # all keys dict
-
-        all_keys = block.groupby(self.keys).agg({target: np.median})
+        all_keys = block.groupby(self.keys)['Demanda_uni_equil'].apply(lambda x: self.getval(x))
+        # all_keys = block.groupby(self.keys).agg({target: np.median})
 
         # initalise dict list
-        self.dicts = [all_keys.to_dict()[target]]  # here map has been creaated for given keys (A,B,C -> demand)
+        self.dicts = [all_keys.to_dict()]  # here map has been creaated for given keys (A,B,C -> demand)
+        print("Complete first part in --- %s seconds -----" % (time.time() - start_time))
 
+        start_time = time.time()
+        keys = self.keys[:-1]
+        key_grouped = block.groupby(keys)['Demanda_uni_equil'].apply(lambda x: self.getval(x))
+        self.dicts = [key_grouped.to_dict()]
+        print("Complete second part in --- %s seconds -----" % (time.time() - start_time))
         # all other dicts ( There can be other combinations as well,like A,B, A)
-        for n in range(1, len(self.keys)):
-            keys = self.keys[:-n]
-            key_grouped = block.groupby(keys).agg({target: np.mean})
-            self.dicts.append(key_grouped.to_dict()[target])
 
-        global_median = np.mean(y)
+        start_time = time.time()
+        for n in range(2, len(self.keys)):
+            keys = self.keys[:-n]
+            key_grouped = block.groupby(keys).agg({target: np.median})
+            self.dicts.append(key_grouped.to_dict()[target])
+            print("finish x")
+        print("Complete Fit last part in --- %s seconds -----" % (time.time() - start_time))
+        global_median = np.median(y)
         self.dicts.append(defaultdict(lambda: global_median))
         return self
 
@@ -50,6 +60,30 @@ class Median(BaseEstimator):
     def predict(self, X):
         return X[self.keys].apply(lambda t: self.fetch_value_from_trained_dic(t, self.dicts),
                                   axis=1)  # get key columns and check with train data
+
+    def getval(self, keys):
+        array = tuple(keys)
+        array_length = len(array)
+        tmp_array = []
+        count = 0
+
+        for i in array:
+            count = 0
+            for j in array:
+                count = count + (np.log1p(i) - np.log1p(j))**2
+            tmp_array.append(np.sqrt(count / array_length))
+
+        count = -1;
+        index = 0
+        min_error_value = tmp_array[0]
+        for val in tmp_array:
+            count += 1
+            if val < min_error_value:
+                min_error_value = val
+                index = count
+
+        demand = array[index]
+        return demand
 
 
 ######################################
@@ -83,10 +117,9 @@ def get_data(N, quick=False):
     columns = ['Semana', 'Agencia_ID', 'Canal_ID', 'Ruta_SAK', 'Cliente_ID', 'Producto_ID', 'Demanda_uni_equil']
 
     if quick:
-        data = pd.read_csv('D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/train.csv', usecols=columns, nrows=40000)
+        df_train = pd.read_csv('D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/train.csv', usecols=columns, nrows=40000)
     else:
-
-        data = pd.read_csv('/home/prashan/Desktop/DM/Kaggle/data/train.csv', usecols=columns)
+        data = pd.read_csv('D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/train.csv', usecols=columns)
         #chunks = RejectionSampling(data, N).run()
         #df_train = pd.concat(chunks, ignore_index=True)
 
@@ -97,22 +130,34 @@ def get_data(N, quick=False):
 
 def submit(estimator, cols):
     # cols = ['Agencia_ID','Canal_ID','Ruta_SAK','Cliente_ID','Producto_ID']
-    df_test = pd.read_csv('/home/prashan/Desktop/DM/Kaggle/data/test.csv')
-    sub = pd.read_csv('/home/prashan/Desktop/DM/Kaggle/data/sample_submission.csv')
+    df_test = pd.read_csv('D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/test.csv')
+    sub = pd.read_csv('D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/sample_submission.csv')
     sub['Demanda_uni_equil'] = estimator.predict(df_test)
-    sub.to_csv('/home/prashan/Desktop/DM/Kaggle/data/result2.csv', index=False)
+    print("Writing file")
+    sub.to_csv('D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/result.csv', index=False)
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     N = 8000
     # [X,y] = get_data(N, quick=True)
-    [X, y] = get_data(N)
-    # print(X.shape)  # this comes from pandas - prints no of rows and cols
 
+
+    print("Getting data")
+    [X, y] = get_data(N)
+    print("Complete getting data in --- %s seconds -----"  % (time.time() - start_time))
+
+
+    # print(X.shape)  # this comes from pandas - prints no of rows and cols
 
     keys = ['Canal_ID', 'Ruta_SAK', 'Producto_ID', 'Cliente_ID']
 
-
     clf = Median(keys)
+    print("Running Fit")
     clf.fit(X, y)
+    print("Predicting")
+    start_time = time.time()
     submit(clf, keys)
+    print("Complete predictinga in --- %s seconds -----" % (time.time() - start_time))
+
+    print("Done")

@@ -134,9 +134,9 @@ def get_data(N, quick=False):
     columns = ['Semana', 'Agencia_ID', 'Canal_ID', 'Ruta_SAK', 'Cliente_ID', 'Producto_ID', 'Demanda_uni_equil']
 
     if quick:
-        df_train = pd.read_csv('/home/prashan/Desktop/DM/Kaggle/data/train.csv', usecols=columns, nrows=40000)
+        df_train = pd.read_csv('D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/train.csv', usecols=columns, nrows=40000)
     else:
-        data = pd.read_csv('/home/prashan/Desktop/DM/Kaggle/data/train.csv', usecols=columns)
+        data = pd.read_csv('D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/train.csv', usecols=columns)
         # chunks = RejectionSampling(data, N).run()
         # df_train = pd.concat(chunks, ignore_index=True)
 
@@ -147,16 +147,16 @@ def get_data(N, quick=False):
 
 def submit(estimator, cols):
     # cols = ['Agencia_ID','Canal_ID','Ruta_SAK','Cliente_ID','Producto_ID']
-    df_test = pd.read_csv('/home/prashan/Desktop/DM/Kaggle/data/test.csv')
-    sub = pd.read_csv('/home/prashan/Desktop/DM/Kaggle/data/sample_submission.csv')
+    df_test = pd.read_csv('D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/test.csv')
+    sub = pd.read_csv('D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/sample_submission.csv')
     sub['Demanda_uni_equil'] = estimator.predict(df_test)
     print("Writing file")
-    sub.to_csv('/home/prashan/Desktop/DM/Kaggle/data/processed_data/my3.csv', index=False)
+    sub.to_csv('D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/result.csv', index=False)
 
 
 if __name__ == "__main__":
     start_time = time.time()
-    N = 2000
+    N = 8000
     # [X,y] = get_data(N, quick=True)
 
 
