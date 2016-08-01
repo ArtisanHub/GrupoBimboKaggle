@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 from sklearn import linear_model
 
 
@@ -10,87 +13,41 @@ val = 0
 
 print("Getting data")
 
-f = open( 'D:/FYP-Developments/Dataset-Kaggale/weeklySeperatedData/week3.csv', 'rU' ) #open train data
-for line in f:
-    cells = line.split(",")
-    features.append((float(cells[ 2 ]), float(cells[ 3 ]), float(cells[ 4 ]), float(cells[ 5 ])))
-    lables.append(float(cells[10]))
-f.close()
-print("week3 done")
+df_adv = pd.read_csv("D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/train.csv")
 
-f = open( 'D:/FYP-Developments/Dataset-Kaggale/weeklySeperatedData/week4.csv', 'rU' ) #open train data
-for line in f:
-    cells = line.split(",")
-    features.append((float(cells[ 2 ]), float(cells[ 3 ]), float(cells[ 4 ]), float(cells[ 5 ])))
-    lables.append(float(cells[10]))
-f.close()
-print("week4 done")
-
-f = open( 'D:/FYP-Developments/Dataset-Kaggale/weeklySeperatedData/week5.csv', 'rU' ) #open train data
-for line in f:
-    cells = line.split(",")
-    features.append((float(cells[ 2 ]), float(cells[ 3 ]), float(cells[ 4 ]), float(cells[ 5 ])))
-    lables.append(float(cells[10]))
-f.close()
-print("week5 done")
-
-f = open( 'D:/FYP-Developments/Dataset-Kaggale/weeklySeperatedData/week6.csv', 'rU' ) #open train data
-for line in f:
-    cells = line.split(",")
-    features.append((float(cells[ 2 ]), float(cells[ 3 ]), float(cells[ 4 ]), float(cells[ 5 ])))
-    lables.append(float(cells[10]))
-f.close()
-print("week6 done")
-
-f = open( 'D:/FYP-Developments/Dataset-Kaggale/weeklySeperatedData/week7.csv', 'rU' ) #open train data
-for line in f:
-    cells = line.split(",")
-    features.append((float(cells[ 2 ]), float(cells[ 3 ]), float(cells[ 4 ]), float(cells[ 5 ])))
-    lables.append(float(cells[10]))
-f.close()
-print("week7 done")
-
-f = open( 'D:/FYP-Developments/Dataset-Kaggale/weeklySeperatedData/week8.csv', 'rU' ) #open train data
-for line in f:
-    cells = line.split(",")
-    features.append((float(cells[ 2 ]), float(cells[ 3 ]), float(cells[ 4 ]), float(cells[ 5 ])))
-    lables.append(float(cells[10]))
-f.close()
-print("week8 done")
-
-f = open( 'D:/FYP-Developments/Dataset-Kaggale/weeklySeperatedData/week9.csv', 'rU' ) #open train data
-for line in f:
-    cells = line.split(",")
-    features.append((float(cells[ 2 ]), float(cells[ 3 ]), float(cells[ 4 ]), float(cells[ 5 ])))
-    lables.append(float(cells[10]))
-f.close()
-print("week9 done")
-
+features = df_adv[['Agencia_ID', 'Canal_ID', 'Ruta_SAK', 'Cliente_ID', 'Producto_ID']]
+lables = df_adv['Demanda_uni_equil']
+print("Getting data complete")
 
 # Create linear regression object
-#regr = linear_model.LinearRegression()
+#regr = linear_model.LinearRegression(fit_intercept=True, normalize=True, copy_X=True, n_jobs=1)
 
 # Create Basian Ridge object
-regr = linear_model.BayesianRidge()
+#regr = linear_model.BayesianRidge()
+
+regr = linear_model.RANSACRegressor(linear_model.LinearRegression())
 
 print("fitting")
 # Train the model using the training sets
 regr.fit(features, lables)
 print("fitting done")
 
-f = open( 'D:/FYP-Developments/Dataset-Kaggale/test.csv', 'rU' ) #open test data
-for line in f:
-    cells = line.split( "," )
-    test.append((float(cells[ 2 ]), float(cells[ 3 ]), float(cells[ 4 ]), float(cells[ 5 ])))
+# The coefficients
+#print('Coefficients: \n', regr.coef_)
 
-f.close()
+# The intercept
+#print('Intercept: \n', regr.intercept_)
 
-output = open('D:/FYP-Developments/Dataset-Kaggale/resultBasianRidge.csv', 'w')
+df_adv = pd.read_csv("D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/test.csv")
+
+test = df_adv[['Agencia_ID', 'Canal_ID', 'Ruta_SAK', 'Cliente_ID', 'Producto_ID']]
+
+output = open('D:/FYP-Developments/Dataset-Kaggale/MedianRejectionSamplingData/result.csv', 'w')
 
 print("Predicting")
-for itm in test:
 
-    temp.append(abs(regr.predict(itm)))
+temp = abs(regr.predict(test))
+#print()
 
 print("Predicting done")
 print("Output writing")
@@ -110,4 +67,7 @@ for itm in temp:
     count = count + 1
 
 print("Finish")
+
+
+
 
