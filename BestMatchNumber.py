@@ -2,7 +2,7 @@ import numpy as np
 import random as rnd
 
 data = list()
-for r in xrange(10000):
+for r in range(10000):
     data.append(rnd.randint(5,70))
     r = r+1
 
