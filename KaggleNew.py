@@ -1,5 +1,5 @@
-import  csv
-import BestMatchingNumber as bm
+import csv
+import BestMatchNumber as bm
 # from __builtin__ import dict
 
 pathToTrainingSet = "/home/jawadhsr/Desktop/Kaggle/input/weeks/"
@@ -17,6 +17,7 @@ with open(pathToTrainingSet+"week3.csv",'rb') as csvfile :
 result_map = dict()
 for key in maps:
     result_map.setdefault(key,bm.bestMatch(maps[key],3))
+    print(result_map(key))
 
 # Here I have made the corresponding rows as a comma seperated string and
 
